@@ -4,7 +4,7 @@ import { getAEMPublish, getAEMAuthor } from '../../scripts/endpointconfig.js';
 export default async function decorate(block) {
   const aempublishurl = getAEMPublish();
   const aemauthorurl = getAEMAuthor();
-  const persistedquery = '/graphql/execute.json/frescopa/OfferByPath';
+  const persistedquery = '/graphql/execute.json/FrescopaCoffee/OfferByPath';
   const offerpath = block.querySelector(':scope div:nth-child(1) > div a').innerHTML.trim();
   let variationname = 'main';
   const variationElem = block.querySelector(':scope div:nth-child(2) > div > p');
