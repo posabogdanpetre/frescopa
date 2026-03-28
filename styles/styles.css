@@ -452,7 +452,7 @@ main > .section:first-of-type {
 
 @media (width >= 900px) {
   main > .section:first-of-type {
-    margin-top: 70px;
+    margin-top: 20px;
   }
 
   main > .section > div {
@@ -637,3 +637,4 @@ p:not(:has(+ p)) {
   margin-top: 40px;
   margin-bottom: 40px;
 }
+

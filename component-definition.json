@@ -1351,6 +1351,46 @@
           }
         }
       ]
+    },
+    {
+      "title": "Content AI",
+      "id": "contentai",
+      "components": [
+        {
+          "title": "Content AI Hero",
+          "id": "contentai-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Contentai Hero",
+                  "model": "contentai-hero",
+                  "key-value": true,
+                  "kicker": "\u2615 ADOBE SUMMIT LAB \u00b7 SEMANTIC & GENERATIVE SEARCH",
+                  "title": "Fr\u00e9scopa Stories",
+                  "description": "Explore our coffee stories \u2014 and discover how <strong>lexical</strong>, <strong>semantic</strong>, and <strong>generative</strong> search surface completely different results from the same content."
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Search Input",
+          "id": "searchinput",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Search Input",
+                  "model": "searchinput"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -5890,5 +5890,45 @@
         ]
       }
     ]
+  },
+  {
+    "id": "contentai-hero",
+    "fields": [
+      {
+        "component": "text",
+        "name": "kicker",
+        "value": "\u2615 ADOBE SUMMIT LAB \u00b7 SEMANTIC & GENERATIVE SEARCH",
+        "label": "Badge Text",
+        "valueType": "string",
+        "description": "Small uppercase badge text shown above the title"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "value": "Fr\u00e9scopa Stories",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "value": "Explore our coffee stories \u2014 and discover how <strong>lexical</strong>, <strong>semantic</strong>, and <strong>generative</strong> search surface completely different results from the same content.",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "searchinput",
+    "fields": [
+      {
+        "component": "text",
+        "name": "id",
+        "value": "",
+        "label": "Component ID",
+        "valueType": "string",
+        "description": "Unique identifier for linking with AI Answer and Search Results components"
+      }
+    ]
   }
 ]
