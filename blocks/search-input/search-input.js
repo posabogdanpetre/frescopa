@@ -1,3 +1,5 @@
+import { getConfigValue } from '../../scripts/configs.js';
+
 let csrfToken = null;
 let currentMode = 'semantic';
 
@@ -25,10 +27,19 @@ const DEFAULT_INTENTS = [
   { icon: '\ud83c\udf75', text: '' },
 ];
 
+function getAuthorHost() {
+  try {
+    return getConfigValue('aem.author') || '';
+  } catch (e) {
+    return '';
+  }
+}
+
 async function getCsrfToken() {
   if (csrfToken) return csrfToken;
+  const host = getAuthorHost();
   try {
-    const resp = await fetch('/libs/granite/csrf/token.json', { credentials: 'same-origin' });
+    const resp = await fetch(`${host}/libs/granite/csrf/token.json`, { credentials: 'include' });
     if (resp.ok) {
       const data = await resp.json();
       csrfToken = data.token;
@@ -137,17 +148,18 @@ function renderSearchResults(container, data, mode) {
 
 async function performSearch(query, resultsEl) {
   const timestamp = Date.now();
+  const host = getAuthorHost();
   const token = await getCsrfToken();
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['csrf-token'] = token;
-  const fetchOpts = { method: 'POST', headers, credentials: 'same-origin' };
+  const fetchOpts = { method: 'POST', headers, credentials: 'include' };
 
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
   resultsEl.style.display = '';
 
   if (currentMode === 'generative') {
     try {
-      const resp = await fetch('/bin/caid/gensearch', {
+      const resp = await fetch(`${host}/bin/caid/gensearch`, {
         ...fetchOpts,
         body: JSON.stringify({ query, timestamp }),
       });
@@ -162,7 +174,7 @@ async function performSearch(query, resultsEl) {
     }
   } else {
     try {
-      const resp = await fetch('/bin/caid/search', {
+      const resp = await fetch(`${host}/bin/caid/search`, {
         ...fetchOpts,
         body: JSON.stringify({ query, timestamp }),
       });
