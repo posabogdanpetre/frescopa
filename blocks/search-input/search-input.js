@@ -1,6 +1,5 @@
 import { getConfigValue } from '../../scripts/configs.js';
 
-let csrfToken = null;
 let currentMode = 'semantic';
 
 const MODES = {
@@ -27,26 +26,12 @@ const DEFAULT_INTENTS = [
   { icon: '\ud83c\udf75', text: '' },
 ];
 
-function getAuthorHost() {
+function getPublishHost() {
   try {
-    return 'https://publish-p187852-e1967098.adobeaemcloud.com';
-    return getConfigValue('aem.author') || '';
+    return getConfigValue('aem.publish') || 'https://publish-p187852-e1967098.adobeaemcloud.com';
   } catch (e) {
     return 'https://publish-p187852-e1967098.adobeaemcloud.com';
   }
-}
-
-async function getCsrfToken() {
-  if (csrfToken) return csrfToken;
-  const host = getAuthorHost();
-  try {
-    const resp = await fetch(`${host}/libs/granite/csrf/token.json`, { credentials: 'include' });
-    if (resp.ok) {
-      const data = await resp.json();
-      csrfToken = data.token;
-    }
-  } catch (e) { /* ignore */ }
-  return csrfToken;
 }
 
 function extractSnippet(text, maxLen = 180) {
@@ -149,11 +134,9 @@ function renderSearchResults(container, data, mode) {
 
 async function performSearch(query, resultsEl) {
   const timestamp = Date.now();
-  const host = getAuthorHost();
-  const token = await getCsrfToken();
+  const host = getPublishHost();
   const headers = { 'Content-Type': 'application/json' };
-  if (token) headers['csrf-token'] = token;
-  const fetchOpts = { method: 'POST', headers, credentials: 'include' };
+  const fetchOpts = { method: 'POST', headers };
 
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
   resultsEl.style.display = '';
