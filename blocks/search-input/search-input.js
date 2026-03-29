@@ -31,7 +31,7 @@ function getAuthorHost() {
   try {
     return getConfigValue('aem.author') || '';
   } catch (e) {
-    return 'https://author-p187852-e1967098.adobeaemcloud.com';
+    return 'https://publish-p187852-e1967098.adobeaemcloud.com';
   }
 }
 
