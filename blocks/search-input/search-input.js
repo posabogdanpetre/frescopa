@@ -29,6 +29,7 @@ const DEFAULT_INTENTS = [
 
 function getAuthorHost() {
   try {
+    return 'https://publish-p187852-e1967098.adobeaemcloud.com';
     return getConfigValue('aem.author') || '';
   } catch (e) {
     return 'https://publish-p187852-e1967098.adobeaemcloud.com';
