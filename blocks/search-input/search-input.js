@@ -292,13 +292,17 @@ function buildIntentChip(intent, inputEl, resultsEl, index) {
   face.append(text, editBtn);
   chip.append(badge, face, editInput);
 
-  // Click face to search
+  // Click face to search, or open edit if no query set
   face.addEventListener('click', (e) => {
     if (editBtn.contains(e.target)) return;
     const q = intent.text;
     if (q) {
       inputEl.value = q;
       performSearch(q, resultsEl);
+    } else {
+      face.style.display = 'none';
+      editInput.style.display = 'block';
+      editInput.focus();
     }
   });
 
