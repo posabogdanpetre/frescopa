@@ -388,9 +388,9 @@ export default function decorate(block) {
 
   exSection.append(exLabel, exRow);
 
-  // Search bar with inline mode toggle and search icon
-  const searchBar = document.createElement('div');
-  searchBar.className = 'cai-search-bar';
+  // Search box with input and search icon
+  const searchBox = document.createElement('div');
+  searchBox.className = 'cai-search-box';
 
   const searchIcon = document.createElement('button');
   searchIcon.type = 'button';
@@ -405,6 +405,17 @@ export default function decorate(block) {
   searchIcon.addEventListener('click', onSearch);
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
 
-  searchBar.append(inputEl, modeToggle, searchIcon);
-  block.append(exSection, searchBar, resultsEl);
+  searchBox.append(inputEl, searchIcon);
+
+  // Mode selector row below search box
+  const modeRow = document.createElement('div');
+  modeRow.className = 'cai-mode-row';
+
+  const modeLabel = document.createElement('span');
+  modeLabel.className = 'cai-mode-label';
+  modeLabel.textContent = 'Select Search Mode';
+
+  modeRow.append(modeLabel, modeToggle);
+
+  block.append(exSection, searchBox, modeRow, resultsEl);
 }
