@@ -314,7 +314,7 @@ function buildIntentChip(intent, inputEl, resultsEl, index) {
   const saveEdit = () => {
     const val = editInput.value.trim();
     intent.text = val;
-    text.textContent = val || 'Click \u270f\ufe0f to set a query';
+    text.textContent = val || 'Click to set a query';
     text.classList.toggle('cai-intent-empty', !val);
     face.style.display = '';
     editInput.style.display = '';

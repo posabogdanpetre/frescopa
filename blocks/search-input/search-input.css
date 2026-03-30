@@ -71,11 +71,6 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.cai-intent-chip .cai-intent-face,
-.cai-intent-chip .cai-intent-input {
-  max-width: 100%;
-  box-sizing: border-box;
-}
 
 .cai-intent-chip:hover {
   border-color: #C97A2A;
@@ -108,11 +103,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 44px 14px 16px;
+  padding: 20px 44px 28px 16px;
   cursor: pointer;
   position: relative;
   transition: background 0.15s;
-  min-height: 48px;
+  min-height: 64px;
+  border-radius: 10px;
 }
 
 .cai-intent-face:hover { background: rgba(244, 233, 220, 0.4); }
@@ -152,14 +148,18 @@
 .cai-intent-input {
   display: none;
   width: 100%;
+  height: 100%;
   padding: 14px 16px;
   border: none;
   background: #fff;
-  font-size: 13px;
+  font-size: 14px;
   color: #58181D;
   outline: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Search box */
