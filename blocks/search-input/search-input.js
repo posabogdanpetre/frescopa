@@ -359,7 +359,7 @@ export default function decorate(block) {
     btn.className = `cai-mode-btn is-${key.substring(0, 3)}`;
     btn.dataset.mode = key;
     if (key === currentMode) btn.classList.add('active');
-    btn.innerHTML = `${mode.icon} ${mode.label}`;
+    btn.innerHTML = `${mode.label}`;
     btn.addEventListener('click', () => {
       currentMode = key;
       modeToggle.querySelectorAll('.cai-mode-btn').forEach((b) => b.classList.remove('active'));
