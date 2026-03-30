@@ -346,20 +346,9 @@ export default function decorate(block) {
   inputEl.placeholder = 'Ask a question or search\u2026';
   inputEl.className = 'cai-search-field';
 
-  // Mode toggle
-  const modeSection = document.createElement('div');
-  modeSection.className = 'cai-mode-section';
-
-  const modeLabel = document.createElement('div');
-  modeLabel.className = 'cai-section-label';
-  modeLabel.textContent = 'CHOOSE SEARCH MODE';
-
+  // Mode toggle (inline in search bar)
   const modeToggle = document.createElement('div');
   modeToggle.className = 'cai-mode-toggle';
-
-  const modeDesc = document.createElement('div');
-  modeDesc.className = 'cai-mode-caption';
-  modeDesc.textContent = MODES[currentMode].description;
 
   Object.entries(MODES).forEach(([key, mode]) => {
     const btn = document.createElement('button');
@@ -372,15 +361,12 @@ export default function decorate(block) {
       currentMode = key;
       modeToggle.querySelectorAll('.cai-mode-btn').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      modeDesc.textContent = mode.description;
       // Auto-search if query exists
       const q = inputEl.value.trim();
       if (q) performSearch(q, resultsEl);
     });
     modeToggle.append(btn);
   });
-
-  modeSection.append(modeLabel, modeToggle, modeDesc);
 
   // Example queries
   const exSection = document.createElement('div');
@@ -400,7 +386,7 @@ export default function decorate(block) {
 
   exSection.append(exLabel, exRow);
 
-  // Search bar
+  // Search bar with inline mode toggle
   const searchBar = document.createElement('div');
   searchBar.className = 'cai-search-bar';
 
@@ -417,6 +403,6 @@ export default function decorate(block) {
   btn.addEventListener('click', onSearch);
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
 
-  searchBar.append(inputEl, btn);
-  block.append(modeSection, exSection, searchBar, resultsEl);
+  searchBar.append(inputEl, modeToggle, btn);
+  block.append(exSection, searchBar, resultsEl);
 }

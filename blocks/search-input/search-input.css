@@ -13,32 +13,29 @@
   text-align: center;
 }
 
-/* Mode toggle */
-.cai-mode-section { text-align: center; margin-bottom: 8px; }
-
+/* Mode toggle (inline in search bar) */
 .cai-mode-toggle {
-  display: inline-flex;
-  gap: 5px;
+  display: flex;
+  gap: 3px;
   background: #f0e8df;
-  border-radius: 12px;
-  padding: 5px;
-  margin-bottom: 8px;
+  border-radius: 8px;
+  padding: 4px;
+  flex-shrink: 0;
 }
 
 .cai-mode-btn {
-  flex: 1;
-  padding: 11px 28px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   color: #888;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
   transition: all 0.2s;
 }
@@ -52,18 +49,6 @@
 .cai-mode-btn.active.is-lex { color: #A33532; }
 .cai-mode-btn.active.is-sem { color: #00647D; }
 .cai-mode-btn.active.is-gen { color: #5B4FCF; }
-
-.cai-mode-caption {
-  font-size: 13px;
-  color: #999;
-  text-align: center;
-  min-height: 20px;
-  margin-bottom: 36px;
-  line-height: 1.5;
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 /* Example intents */
 .cai-examples-section { text-align: center; margin-bottom: 14px; }
@@ -150,6 +135,7 @@
 /* Search bar */
 .cai-search-bar {
   display: flex;
+  align-items: stretch;
   gap: 10px;
   margin-bottom: 40px;
 }
@@ -522,8 +508,12 @@
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .cai-search-bar { flex-wrap: wrap; }
+  .cai-search-field { width: 100%; }
+  .cai-mode-toggle { width: 100%; justify-content: center; }
+  .cai-mode-btn { padding: 8px 14px; font-size: 12px; }
+  .cai-search-btn { width: 100%; }
   .cai-intents-grid { grid-template-columns: 1fr; }
-  .cai-mode-btn { padding: 10px 16px; font-size: 13px; }
   .cai-results-head { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
