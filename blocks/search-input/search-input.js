@@ -47,23 +47,17 @@ function extractSnippet(text, maxLen = 180) {
     .substring(0, maxLen) + (text.length > maxLen ? '\u2026' : '');
 }
 
-const DEFAULT_IMAGE = '/content/dam/caid/default.png';
+const DEFAULT_IMAGE = '/default-meta-image.png?width=1200&format=pjpg&optimize=medium';
 
 function getImageUrl(result) {
   const meta = (result.data && result.data.metadata) || {};
   const imgPath = meta['twitter:image'] || meta.primaryImagePath || '';
-  if (!imgPath) {
-    const host = getPublishHost();
-    return `${host}${DEFAULT_IMAGE}`;
-  }
+  if (!imgPath) return DEFAULT_IMAGE;
   if (imgPath.startsWith('http')) return imgPath;
   try {
     const url = new URL((result.data && result.data.source) || '');
     return `${url.origin}${imgPath}`;
-  } catch (e) {
-    const host = getPublishHost();
-    return `${host}${DEFAULT_IMAGE}`;
-  }
+  } catch (e) { return DEFAULT_IMAGE; }
 }
 
 function formatMarkdown(text) {
