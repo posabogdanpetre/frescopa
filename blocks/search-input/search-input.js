@@ -176,15 +176,6 @@ async function performSearch(query, resultsEl) {
 
   resultsEl.style.display = '';
 
-  if (currentMode === 'lexical') {
-    resultsEl.innerHTML = `<div class="cai-coming-soon">
-      <span class="cai-coming-soon-icon">\ud83d\udcda</span>
-      <h3>Lexical Search \u2014 Coming Soon</h3>
-      <p>Keyword-based search is under development. Try <strong>Semantic</strong> or <strong>Generative</strong> search in the meantime.</p>
-    </div>`;
-    return;
-  }
-
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
   if (currentMode === 'generative') {
@@ -202,9 +193,24 @@ async function performSearch(query, resultsEl) {
     } catch (e) {
       resultsEl.innerHTML = `<div class="cai-error">Request failed: ${e.message}</div>`;
     }
+  } else if (currentMode === 'lexical') {
+    try {
+      const resp = await fetch(`${host}/bin/caid/lexicalsearch`, {
+        ...fetchOpts,
+        body: JSON.stringify({ query, timestamp }),
+      });
+      const data = await resp.json();
+      if (data.error) {
+        resultsEl.innerHTML = `<div class="cai-error">${data.error}</div>`;
+      } else {
+        renderSearchResults(resultsEl, data, currentMode, query);
+      }
+    } catch (e) {
+      resultsEl.innerHTML = `<div class="cai-error">Search failed: ${e.message}</div>`;
+    }
   } else {
     try {
-      const resp = await fetch(`${host}/bin/caid/search`, {
+      const resp = await fetch(`${host}/bin/caid/semanticsearch`, {
         ...fetchOpts,
         body: JSON.stringify({ query, timestamp }),
       });
