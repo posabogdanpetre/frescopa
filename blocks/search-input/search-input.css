@@ -429,6 +429,79 @@
 
 .cai-gen-source-tag:hover { background: rgba(91, 79, 207, 0.2); }
 
+/* Pagination */
+.cai-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.cai-page-btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #00647D;
+  background: rgba(0, 100, 125, 0.08);
+  border: 1.5px solid rgba(0, 100, 125, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cai-page-btn:hover:not(:disabled) {
+  background: rgba(0, 100, 125, 0.15);
+  border-color: #00647D;
+}
+
+.cai-page-btn:disabled {
+  color: #ccc;
+  background: #f5f5f5;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.cai-page-info {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Coming soon */
+.cai-coming-soon {
+  text-align: center;
+  padding: 64px 20px;
+  animation: cai-fadeUp 0.3s ease;
+}
+
+.cai-coming-soon-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.cai-coming-soon h3 {
+  font-family: Baskerville, 'Baskerville Old Face', Garamond, serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #A33532;
+  margin: 0 0 8px;
+}
+
+.cai-coming-soon p {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cai-coming-soon strong {
+  color: #00647D;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .cai-intents-grid { grid-template-columns: 1fr; }
