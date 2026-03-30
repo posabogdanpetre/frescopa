@@ -129,17 +129,16 @@
   position: absolute;
   left: 12px;
   bottom: 8px;
-  background: none;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   border: none;
   cursor: pointer;
-  padding: 2px;
+  padding: 0;
   opacity: 0.6;
   transition: opacity 0.15s;
-  line-height: 0;
-}
-
-.cai-intent-edit img {
-  display: block;
 }
 
 .cai-intent-edit:hover { opacity: 1; }

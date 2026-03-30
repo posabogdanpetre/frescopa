@@ -280,12 +280,8 @@ function buildIntentChip(intent, inputEl, resultsEl, index) {
   const editBtn = document.createElement('button');
   editBtn.type = 'button';
   editBtn.className = 'cai-intent-edit';
-  const editImg = document.createElement('img');
-  editImg.src = `${window.hlx.codeBasePath}/blocks/search-input/edit-pencil.png`;
-  editImg.alt = 'Edit';
-  editImg.width = 20;
-  editImg.height = 20;
-  editBtn.appendChild(editImg);
+  editBtn.style.backgroundImage = `url(${window.hlx.codeBasePath}/blocks/search-input/edit-pencil.png)`;
+  editBtn.setAttribute('aria-label', 'Edit query');
 
   const editInput = document.createElement('input');
   editInput.type = 'text';
