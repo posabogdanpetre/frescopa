@@ -87,7 +87,7 @@ function renderGenAnswer(container, data) {
   container.innerHTML = html;
 }
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 8;
 
 function renderSearchResults(container, data, mode, query) {
   const results = (data.results || []).filter((r) => {
