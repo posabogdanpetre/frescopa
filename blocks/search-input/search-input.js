@@ -58,6 +58,38 @@ function getImageUrl(result) {
   } catch (e) { return ''; }
 }
 
+function formatMarkdown(text) {
+  if (!text) return '';
+  // Split numbered items like "1. **Title**: description" into list items
+  let formatted = text.replace(/(\d+)\.\s+\*\*([^*]+)\*\*:\s*/g, '\n<li><strong>$2:</strong> ');
+  // Handle remaining **bold** markers
+  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Handle bullet points "- text"
+  formatted = formatted.replace(/(?:^|\n)\s*-\s+/g, '\n<li>');
+
+  // If we have list items, wrap them in an <ol> or <ul>
+  if (formatted.includes('<li>')) {
+    // Split into intro text and list content
+    const firstLi = formatted.indexOf('<li>');
+    const intro = formatted.substring(0, firstLi).trim();
+    const listContent = formatted.substring(firstLi);
+
+    // Determine if ordered (numbered) or unordered
+    const isOrdered = /\d+\.\s/.test(text);
+    const tag = isOrdered ? 'ol' : 'ul';
+
+    // Close each <li> before the next one and at the end
+    let items = listContent.split('<li>').filter((s) => s.trim());
+    const listHtml = items.map((item) => `<li>${item.trim()}</li>`).join('');
+
+    formatted = (intro ? `<p>${intro}</p>` : '') + `<${tag}>${listHtml}</${tag}>`;
+  } else {
+    formatted = `<p>${formatted}</p>`;
+  }
+
+  return formatted;
+}
+
 function renderGenAnswer(container, data) {
   const answer = data.result || '';
   const links = (data.retrievedLinks || []).filter((l) => l.url && !l.url.endsWith('/robots.txt'));
@@ -70,7 +102,7 @@ function renderGenAnswer(container, data) {
         <div class="cai-gen-sublabel">Powered by Content AI</div>
       </div>
     </div>
-    <div class="cai-gen-body">${answer}</div>`;
+    <div class="cai-gen-body">${formatMarkdown(answer)}</div>`;
 
   if (links.length > 0) {
     html += '<div class="cai-gen-sources"><span class="cai-gen-sources-label">Sources</span><div class="cai-gen-sources-list">';
