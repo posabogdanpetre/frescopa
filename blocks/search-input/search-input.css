@@ -54,6 +54,14 @@
 /* Example intents */
 .cai-examples-section { text-align: center; margin-bottom: 14px; }
 
+.cai-label-edit-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  display: inline-block;
+  object-fit: contain;
+}
+
 .cai-intents-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

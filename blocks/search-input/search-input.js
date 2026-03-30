@@ -381,7 +381,8 @@ export default function decorate(block) {
 
   const exLabel = document.createElement('div');
   exLabel.className = 'cai-section-label';
-  exLabel.textContent = 'Example Queries. Click box to search, \ud83d\udd8a\ufe0f to personalize.';
+  const editIconUrl = `${window.hlx.codeBasePath}/blocks/search-input/edit-pencil.png`;
+  exLabel.innerHTML = `Example Queries. Click box to search, <img src="${editIconUrl}" alt="edit" class="cai-label-edit-icon"> to personalize.`;
 
   const exRow = document.createElement('div');
   exRow.className = 'cai-intents-grid';
