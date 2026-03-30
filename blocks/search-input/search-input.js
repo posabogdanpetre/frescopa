@@ -386,23 +386,23 @@ export default function decorate(block) {
 
   exSection.append(exLabel, exRow);
 
-  // Search bar with inline mode toggle
+  // Search bar with inline mode toggle and search icon
   const searchBar = document.createElement('div');
   searchBar.className = 'cai-search-bar';
 
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.textContent = 'Search Stories';
-  btn.className = 'cai-search-btn';
+  const searchIcon = document.createElement('button');
+  searchIcon.type = 'button';
+  searchIcon.className = 'cai-search-icon-btn';
+  searchIcon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
 
   const onSearch = () => {
     const q = inputEl.value.trim();
     if (q) performSearch(q, resultsEl);
   };
 
-  btn.addEventListener('click', onSearch);
+  searchIcon.addEventListener('click', onSearch);
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
 
-  searchBar.append(inputEl, modeToggle, btn);
+  searchBar.append(inputEl, modeToggle, searchIcon);
   block.append(exSection, searchBar, resultsEl);
 }
