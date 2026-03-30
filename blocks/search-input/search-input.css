@@ -62,7 +62,7 @@
 }
 
 .cai-intent-chip {
-  border: 1.5px solid rgba(235, 164, 57, 0.5);
+  border: 1.5px solid #F4E9DC;
   border-radius: 10px;
   overflow: hidden;
   background: rgba(235, 164, 57, 0.06);
@@ -70,7 +70,7 @@
 }
 
 .cai-intent-chip:hover {
-  border-color: rgba(235, 164, 57, 0.9);
+  border-color: #F4E9DC;
   box-shadow: 0 2px 8px rgba(235, 164, 57, 0.2);
 }
 
@@ -137,7 +137,7 @@
 .cai-search-box {
   display: flex;
   align-items: center;
-  border: 1.5px solid rgba(235, 164, 57, 0.5);
+  border: 1.5px solid #F4E9DC;
   border-radius: 12px;
   background: #fff;
   padding: 6px 6px 6px 0;
@@ -146,7 +146,7 @@
 }
 
 .cai-search-box:focus-within {
-  border-color: rgba(235, 164, 57, 0.9);
+  border-color: #F4E9DC;
   box-shadow: 0 2px 8px rgba(235, 164, 57, 0.2);
 }
 
