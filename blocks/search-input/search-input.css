@@ -139,7 +139,7 @@
   align-items: center;
   gap: 0;
   margin-bottom: 40px;
-  border: 2px solid #ddd;
+  border: 1.5px solid rgba(235, 164, 57, 0.5);
   border-radius: 12px;
   background: #fff;
   padding: 6px 6px 6px 0;
@@ -147,8 +147,8 @@
 }
 
 .cai-search-bar:focus-within {
-  border-color: #00647D;
-  box-shadow: 0 0 0 3px rgba(0, 100, 125, 0.1);
+  border-color: rgba(235, 164, 57, 0.9);
+  box-shadow: 0 2px 8px rgba(235, 164, 57, 0.2);
 }
 
 .cai-search-field {
@@ -174,13 +174,13 @@
   flex-shrink: 0;
   border: none;
   border-radius: 8px;
-  background: #00647D;
-  color: #fff;
+  background: #f0e8df;
+  color: #58181D;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
 
-.cai-search-icon-btn:hover { background: #00526a; }
+.cai-search-icon-btn:hover { background: #e6d9cb; }
 .cai-search-icon-btn:active { transform: scale(0.95); }
 
 /* Results area */
