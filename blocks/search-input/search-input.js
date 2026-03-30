@@ -281,7 +281,7 @@ function buildIntentChip(intent, inputEl, resultsEl, index) {
   editBtn.type = 'button';
   editBtn.className = 'cai-intent-edit';
   const editImg = document.createElement('img');
-  editImg.src = `${window.hlx.codeBasePath}/icons/edit-pencil.png`;
+  editImg.src = `${window.hlx.codeBasePath}/blocks/search-input/edit-pencil.png`;
   editImg.alt = 'Edit';
   editImg.width = 20;
   editImg.height = 20;
