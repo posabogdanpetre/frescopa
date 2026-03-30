@@ -396,6 +396,25 @@
   margin-bottom: 16px;
 }
 
+.cai-gen-body p {
+  margin: 0 0 12px;
+}
+
+.cai-gen-body ol,
+.cai-gen-body ul {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.cai-gen-body li {
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.cai-gen-body li strong {
+  color: #00647D;
+}
+
 .cai-gen-sources {
   border-top: 1px solid rgba(91, 79, 207, 0.15);
   padding-top: 12px;
