@@ -260,27 +260,32 @@ async function performSearch(query, resultsEl) {
   }
 }
 
-function buildIntentChip(intent, inputEl, resultsEl) {
+function buildIntentChip(intent, inputEl, resultsEl, index) {
   const chip = document.createElement('div');
   chip.className = 'cai-intent-chip';
+
+  const badge = document.createElement('span');
+  badge.className = 'cai-intent-badge';
+  badge.textContent = index;
 
   const face = document.createElement('div');
   face.className = 'cai-intent-face';
 
-  const icon = document.createElement('span');
-  icon.className = 'cai-intent-icon';
-  icon.textContent = intent.icon;
-
   const text = document.createElement('span');
   text.className = 'cai-intent-text';
-  text.textContent = intent.text || 'Click \u270f\ufe0f to set a query';
+  text.textContent = intent.text || 'Click to set a query';
 
   if (!intent.text) text.classList.add('cai-intent-empty');
 
   const editBtn = document.createElement('button');
   editBtn.type = 'button';
   editBtn.className = 'cai-intent-edit';
-  editBtn.textContent = '\u270f\ufe0f';
+  const editImg = document.createElement('img');
+  editImg.src = `${window.hlx.codeBasePath}/icons/edit-pencil.png`;
+  editImg.alt = 'Edit';
+  editImg.width = 20;
+  editImg.height = 20;
+  editBtn.appendChild(editImg);
 
   const editInput = document.createElement('input');
   editInput.type = 'text';
@@ -288,12 +293,12 @@ function buildIntentChip(intent, inputEl, resultsEl) {
   editInput.value = intent.text;
   editInput.placeholder = 'Type a query\u2026';
 
-  face.append(icon, text, editBtn);
-  chip.append(face, editInput);
+  face.append(text, editBtn);
+  chip.append(badge, face, editInput);
 
   // Click face to search
   face.addEventListener('click', (e) => {
-    if (e.target === editBtn) return;
+    if (editBtn.contains(e.target)) return;
     const q = intent.text;
     if (q) {
       inputEl.value = q;
@@ -376,14 +381,14 @@ export default function decorate(block) {
 
   const exLabel = document.createElement('div');
   exLabel.className = 'cai-section-label';
-  exLabel.innerHTML = 'EXAMPLE QUERIES \u2014 CLICK TO SEARCH, \u270f\ufe0f TO CUSTOMIZE';
+  exLabel.textContent = 'Example Queries. Click box to search, \ud83d\udd8a\ufe0f to personalize.';
 
   const exRow = document.createElement('div');
   exRow.className = 'cai-intents-grid';
 
   const intents = DEFAULT_INTENTS.map((i) => ({ ...i }));
-  intents.forEach((intent) => {
-    exRow.append(buildIntentChip(intent, inputEl, resultsEl));
+  intents.forEach((intent, idx) => {
+    exRow.append(buildIntentChip(intent, inputEl, resultsEl, idx + 1));
   });
 
   exSection.append(exLabel, exRow);

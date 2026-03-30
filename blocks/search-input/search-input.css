@@ -57,80 +57,103 @@
 .cai-intents-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 20px;
+  margin-bottom: 18px;
+  padding-top: 8px;
 }
 
 .cai-intent-chip {
-  border: 1.5px solid #F4E9DC;
-  border-radius: 10px;
-  overflow: hidden;
-  background: rgba(235, 164, 57, 0.06);
+  position: relative;
+  border: 2px solid #F4E9DC;
+  border-radius: 12px;
+  overflow: visible;
+  background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .cai-intent-chip:hover {
-  border-color: #F4E9DC;
-  box-shadow: 0 2px 8px rgba(235, 164, 57, 0.2);
+  border-color: #C97A2A;
+  box-shadow: 0 2px 8px rgba(201, 122, 42, 0.15);
 }
 
 .cai-intent-chip:has(.cai-intent-input:focus) {
-  border-color: #00647D;
+  border-color: #C97A2A;
+}
+
+.cai-intent-badge {
+  position: absolute;
+  top: -12px;
+  left: -10px;
+  width: 28px;
+  height: 28px;
+  background: #C97A2A;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .cai-intent-face {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 38px 12px 14px;
+  padding: 14px 44px 14px 16px;
   cursor: pointer;
   position: relative;
   transition: background 0.15s;
+  min-height: 48px;
 }
 
-.cai-intent-face:hover { background: rgba(235, 164, 57, 0.12); }
-
-.cai-intent-icon { font-size: 1.05rem; flex-shrink: 0; }
+.cai-intent-face:hover { background: rgba(244, 233, 220, 0.4); }
 
 .cai-intent-text {
   font-size: 13px;
   font-weight: 500;
   color: #58181D;
   line-height: 1.35;
+  flex: 1;
 }
 
 .cai-intent-text.cai-intent-empty {
-  color: #ccc;
+  color: #bbb;
   font-weight: 400;
   font-style: italic;
 }
 
 .cai-intent-edit {
   position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 12px;
+  bottom: 8px;
   background: none;
   border: none;
-  font-size: 12px;
   cursor: pointer;
-  color: #ccc;
-  padding: 2px 4px;
-  transition: color 0.15s;
-  line-height: 1;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+  line-height: 0;
 }
 
-.cai-intent-edit:hover { color: #00647D; }
+.cai-intent-edit img {
+  display: block;
+}
+
+.cai-intent-edit:hover { opacity: 1; }
 
 .cai-intent-input {
   display: none;
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: none;
   background: #fff;
   font-size: 13px;
   color: #58181D;
   outline: none;
+  border-radius: 0 0 10px 10px;
 }
 
 /* Search box */
