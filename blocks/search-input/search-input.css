@@ -1,5 +1,6 @@
 .search-input {
   padding: 0 0 24px;
+  min-height: 50vh;
 }
 
 /* Shared label */
