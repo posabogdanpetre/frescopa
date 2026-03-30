@@ -71,6 +71,12 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.cai-intent-chip .cai-intent-face,
+.cai-intent-chip .cai-intent-input {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .cai-intent-chip:hover {
   border-color: #C97A2A;
   box-shadow: 0 2px 8px rgba(201, 122, 42, 0.15);
@@ -153,6 +159,7 @@
   color: #58181D;
   outline: none;
   border-radius: 0 0 10px 10px;
+  box-sizing: border-box;
 }
 
 /* Search box */
