@@ -207,15 +207,17 @@ async function performSearch(query, resultsEl) {
   resultsEl.style.display = '';
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
-  // Scroll results into view after a brief delay to let DOM update
+  // Scroll down so example queries are at top (just below fixed header)
   setTimeout(() => {
-    const modeRow = document.querySelector('.cai-mode-row');
-    if (modeRow) {
-      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height'), 10) || 70;
-      const top = modeRow.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
-      window.scrollTo({ top, behavior: 'smooth' });
+    const exEl = document.querySelector('.cai-examples-section');
+    if (!exEl) return;
+    const navHeight = document.querySelector('header')?.getBoundingClientRect().height || 70;
+    const targetTop = exEl.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+    // Only scroll down, never up
+    if (targetTop > window.pageYOffset) {
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
     }
-  }, 100);
+  }, 150);
 
   if (currentMode === 'generative') {
     try {
