@@ -207,9 +207,13 @@ async function performSearch(query, resultsEl) {
   resultsEl.style.display = '';
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
-  // Scroll example queries into view, pushing the hero out but keeping queries visible
-  const exSection = document.querySelector('.cai-examples-section');
-  if (exSection) exSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Scroll so the example queries label is visible at the top
+  const sectionLabel = document.querySelector('.cai-section-label');
+  if (sectionLabel) {
+    const offset = 20;
+    const top = sectionLabel.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
 
   if (currentMode === 'generative') {
     try {
