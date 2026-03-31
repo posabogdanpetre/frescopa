@@ -418,9 +418,26 @@ export default function decorate(block) {
 
   const modeLabel = document.createElement('span');
   modeLabel.className = 'cai-mode-label';
-  modeLabel.textContent = 'Select Search Mode';
+  modeLabel.textContent = 'Search Mode';
 
   modeRow.append(modeLabel, modeToggle);
 
-  block.append(exSection, searchBox, modeRow, resultsEl);
+  // Empty state shown before any search
+  const emptyState = document.createElement('div');
+  emptyState.className = 'cai-empty-state';
+  emptyState.innerHTML = `
+    <svg class="cai-empty-state-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <h3>Discover Fréscopa Stories</h3>
+    <p>Type a query above or click an example to explore stories using <strong>lexical</strong>, <strong>semantic</strong>, or <strong>generative</strong> search.</p>
+  `;
+
+  // Show/hide empty state when results change
+  const observer = new MutationObserver(() => {
+    emptyState.style.display = resultsEl.children.length > 0 ? 'none' : '';
+  });
+  observer.observe(resultsEl, { childList: true });
+
+  block.append(exSection, searchBox, modeRow, emptyState, resultsEl);
 }

@@ -1,17 +1,16 @@
 .search-input {
-  padding: 0 0 24px;
-  min-height: 50vh;
+  padding: 0 0 40px;
+  min-height: 60vh;
 }
 
 /* Shared label */
 .cai-section-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #bbb;
-  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  margin-bottom: 12px;
   text-align: center;
+  line-height: 1.5;
 }
 
 /* Mode toggle (inline in search bar) */
@@ -25,12 +24,12 @@
 }
 
 .cai-mode-btn {
-  padding: 8px 16px;
+  padding: 9px 20px;
   border: none;
   border-radius: 6px;
   background: transparent;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: #888;
   display: flex;
@@ -225,18 +224,66 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
-  margin-bottom: 40px;
+  gap: 14px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #F4E9DC;
 }
 
 .cai-mode-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Empty state */
+.cai-empty-state {
+  text-align: center;
+  padding: 64px 20px 80px;
+  animation: cai-fadeUp 0.4s ease;
+}
+
+.cai-empty-state-icon {
+  color: #C97A2A;
+  opacity: 0.35;
+  margin-bottom: 16px;
+}
+
+.cai-empty-state h3 {
+  font-family: Baskerville, 'Baskerville Old Face', Garamond, serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #58181D;
+  margin: 0 0 10px;
+}
+
+.cai-empty-state p {
+  font-size: 15px;
+  color: #999;
+  line-height: 1.65;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.cai-empty-state strong {
+  color: #C97A2A;
+  font-weight: 600;
 }
 
 /* Results area */
-.cai-results-area { min-height: 0; }
+.cai-results-area {
+  min-height: 0;
+  padding: 0;
+}
+
+.cai-results-area:not(:empty) {
+  background: rgba(244, 233, 220, 0.15);
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 8px;
+}
 
 .cai-loading {
   display: flex;
@@ -321,7 +368,14 @@
 .cai-stories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
-  gap: 24px;
+  gap: 28px;
+  max-width: 1080px;
+}
+
+@media (min-width: 960px) {
+  .cai-stories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .cai-story-card {
@@ -505,20 +559,22 @@
 }
 
 .cai-page-btn {
-  padding: 10px 24px;
-  font-size: 14px;
+  padding: 14px 48px;
+  font-size: 15px;
   font-weight: 600;
-  color: #00647D;
-  background: rgba(0, 100, 125, 0.08);
-  border: 1.5px solid rgba(0, 100, 125, 0.2);
-  border-radius: 8px;
+  color: #58181D;
+  background: #F4E9DC;
+  border: 1.5px solid #e0d0c0;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
+  min-width: 240px;
 }
 
 .cai-page-btn:hover:not(:disabled) {
-  background: rgba(0, 100, 125, 0.15);
-  border-color: #00647D;
+  background: #ecdcc8;
+  border-color: #C97A2A;
+  color: #C97A2A;
 }
 
 .cai-page-btn:disabled {
@@ -570,7 +626,11 @@
 @media (max-width: 768px) {
   .cai-mode-row { flex-wrap: wrap; justify-content: center; }
   .cai-mode-label { width: 100%; text-align: center; }
-  .cai-mode-btn { padding: 8px 12px; font-size: 12px; }
+  .cai-mode-btn { padding: 8px 14px; font-size: 13px; }
   .cai-intents-grid { grid-template-columns: 1fr; }
   .cai-results-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .cai-results-area:not(:empty) { padding: 20px 16px; }
+  .cai-empty-state { padding: 40px 16px 60px; }
+  .cai-empty-state h3 { font-size: 20px; }
+  .cai-page-btn { min-width: 180px; padding: 12px 32px; }
 }
