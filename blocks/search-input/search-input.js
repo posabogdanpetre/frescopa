@@ -124,7 +124,10 @@ function renderGenAnswer(container, data) {
 function filterStoryResults(results) {
   return (results || []).filter((r) => {
     const src = r.data && r.data.source;
-    return src && src.includes('/stories') && !src.endsWith('/robots.txt');
+    if (!src || src.endsWith('/robots.txt')) return false;
+    // Match pages under /stories/ path, but not /stories itself
+    const path = new URL(src, 'https://x').pathname;
+    return path.match(/\/stories\/.+/);
   });
 }
 
