@@ -207,9 +207,9 @@ async function performSearch(query, resultsEl) {
   resultsEl.style.display = '';
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
-  // Scroll search area into view, pushing the hero out
-  const searchBlock = document.querySelector('.search-input');
-  if (searchBlock) searchBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Scroll example queries into view, pushing the hero out but keeping queries visible
+  const exSection = document.querySelector('.cai-examples-section');
+  if (exSection) exSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   if (currentMode === 'generative') {
     try {
