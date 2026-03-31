@@ -207,13 +207,15 @@ async function performSearch(query, resultsEl) {
   resultsEl.style.display = '';
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
-  // Scroll so the search section is visible, with example queries at top
-  const searchSection = document.querySelector('.search-input-container');
-  if (searchSection) {
-    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-    const top = searchSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
+  // Scroll results into view after a brief delay to let DOM update
+  setTimeout(() => {
+    const modeRow = document.querySelector('.cai-mode-row');
+    if (modeRow) {
+      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height'), 10) || 70;
+      const top = modeRow.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, 100);
 
   if (currentMode === 'generative') {
     try {
