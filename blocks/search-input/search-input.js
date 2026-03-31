@@ -177,7 +177,7 @@ function renderSearchResults(container, allResults, mode, cursor, fetchNextPage)
     </div>`;
   }
 
-  container.innerHTML = banner + header + cards + pagination;
+  container.innerHTML = header + cards + pagination;
 
   if (cursor) {
     const nextBtn = container.querySelector('.cai-page-next');
