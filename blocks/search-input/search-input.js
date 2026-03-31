@@ -207,11 +207,11 @@ async function performSearch(query, resultsEl) {
   resultsEl.style.display = '';
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
-  // Scroll so the example queries label is visible at the top
-  const sectionLabel = document.querySelector('.cai-section-label');
-  if (sectionLabel) {
-    const offset = 20;
-    const top = sectionLabel.getBoundingClientRect().top + window.scrollY - offset;
+  // Scroll so the search section is visible, with example queries at top
+  const searchSection = document.querySelector('.search-input-container');
+  if (searchSection) {
+    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+    const top = searchSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
     window.scrollTo({ top, behavior: 'smooth' });
   }
 
