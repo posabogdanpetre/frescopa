@@ -121,85 +121,78 @@ function renderGenAnswer(container, data) {
   container.innerHTML = html;
 }
 
-const PAGE_SIZE = 8;
-
-function renderSearchResults(container, data, mode, query) {
-  const results = (data.results || []).filter((r) => {
+function filterStoryResults(results) {
+  return (results || []).filter((r) => {
     const src = r.data && r.data.source;
-    return src && !src.endsWith('/robots.txt');
+    return src && src.includes('/stories') && !src.endsWith('/robots.txt');
   });
-  const totalCount = results.length;
-  const modeInfo = MODES[mode] || MODES.semantic;
+}
 
-  if (totalCount === 0) {
+function renderResultCards(results) {
+  return results.map((result) => {
+    const meta = (result.data && result.data.metadata) || {};
+    const title = meta.title || meta['twitter:title'] || 'Untitled';
+    const source = (result.data && result.data.source) || '#';
+    const snippet = extractSnippet(result.data && result.data.text);
+    const imageUrl = getImageUrl(result);
+
+    return `<a href="${source}" class="cai-story-card" target="_blank">
+      ${imageUrl ? `<div class="cai-story-img"><img src="${imageUrl}" alt="${title}" loading="lazy"></div>` : '<div class="cai-story-img cai-story-img-empty"></div>'}
+      <div class="cai-story-body">
+        <div class="cai-story-title">${title}</div>
+        <p class="cai-story-teaser">${snippet}</p>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function renderSearchResults(container, allResults, mode, cursor, fetchNextPage) {
+  const modeInfo = MODES[mode] || MODES.semantic;
+  const count = allResults.length;
+
+  if (count === 0) {
     container.innerHTML = '<div class="cai-empty">No results found.</div>';
     return;
   }
 
-  let currentPage = 1;
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const banner = `<div class="cai-insight">
+    <span class="cai-insight-icon">\ud83d\udca1</span>
+    <span>${modeInfo.label} search found <strong>${count} relevant stories</strong>.</span>
+  </div>`;
 
-  function renderPage() {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    const pageResults = results.slice(start, end);
+  const header = `<div class="cai-results-head">
+    <h3 class="cai-results-title">Stories Found</h3>
+    <div class="cai-results-meta">
+      <span class="cai-results-count">${count} results</span>
+      <span class="cai-mode-pill pill-${mode}">${modeInfo.label.toUpperCase()}</span>
+    </div>
+  </div>`;
 
-    const banner = `<div class="cai-insight">
-      <span class="cai-insight-icon">\ud83d\udca1</span>
-      <span>${modeInfo.label} search found <strong>${totalCount} relevant stories</strong>.</span>
+  const cards = `<div class="cai-stories-grid">${renderResultCards(allResults)}</div>`;
+
+  let pagination = '';
+  if (cursor) {
+    pagination = `<div class="cai-pagination">
+      <button class="cai-page-btn cai-page-next">Load More Results</button>
     </div>`;
-
-    const header = `<div class="cai-results-head">
-      <h3 class="cai-results-title">Stories Found</h3>
-      <div class="cai-results-meta">
-        <span class="cai-results-count">${totalCount} results</span>
-        <span class="cai-mode-pill pill-${mode}">${modeInfo.icon} ${modeInfo.label.toUpperCase()}</span>
-      </div>
-    </div>`;
-
-    const cards = `<div class="cai-stories-grid">${pageResults.map((result) => {
-      const meta = (result.data && result.data.metadata) || {};
-      const title = meta.title || meta['twitter:title'] || 'Untitled';
-      const source = (result.data && result.data.source) || '#';
-      const snippet = extractSnippet(result.data && result.data.text);
-      const imageUrl = getImageUrl(result);
-
-      return `<a href="${source}" class="cai-story-card" target="_blank">
-        ${imageUrl ? `<div class="cai-story-img"><img src="${imageUrl}" alt="${title}" loading="lazy"></div>` : '<div class="cai-story-img cai-story-img-empty"></div>'}
-        <div class="cai-story-body">
-          <div class="cai-story-title">${title}</div>
-          <p class="cai-story-teaser">${snippet}</p>
-        </div>
-      </a>`;
-    }).join('')}</div>`;
-
-    let pagination = '';
-    if (totalPages > 1) {
-      pagination = `<div class="cai-pagination">
-        <button class="cai-page-btn cai-page-prev" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
-        <span class="cai-page-info">Page ${currentPage} of ${totalPages}</span>
-        <button class="cai-page-btn cai-page-next" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
-      </div>`;
-    }
-
-    container.innerHTML = banner + header + cards + pagination;
-
-    // Bind pagination buttons
-    const prevBtn = container.querySelector('.cai-page-prev');
-    const nextBtn = container.querySelector('.cai-page-next');
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        if (currentPage > 1) { currentPage -= 1; renderPage(); }
-      });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        if (currentPage < totalPages) { currentPage += 1; renderPage(); }
-      });
-    }
   }
 
-  renderPage();
+  container.innerHTML = banner + header + cards + pagination;
+
+  if (cursor) {
+    const nextBtn = container.querySelector('.cai-page-next');
+    nextBtn.addEventListener('click', () => {
+      nextBtn.disabled = true;
+      nextBtn.textContent = 'Loading\u2026';
+      fetchNextPage(cursor);
+    });
+  }
+}
+
+function getSearchEndpoint(mode) {
+  if (mode === 'lexical') return '/bin/caid/lexicalsearch';
+  if (mode === 'generative') return '/bin/caid/gensearch';
+  return '/bin/caid/semanticsearch';
 }
 
 async function performSearch(query, resultsEl) {
@@ -209,7 +202,6 @@ async function performSearch(query, resultsEl) {
   const fetchOpts = { method: 'POST', headers };
 
   resultsEl.style.display = '';
-
   resultsEl.innerHTML = '<div class="cai-loading"><div class="cai-spinner"></div> Searching\u2026</div>';
 
   if (currentMode === 'generative') {
@@ -227,37 +219,41 @@ async function performSearch(query, resultsEl) {
     } catch (e) {
       resultsEl.innerHTML = `<div class="cai-error">Request failed: ${e.message}</div>`;
     }
-  } else if (currentMode === 'lexical') {
+    return;
+  }
+
+  // Semantic and Lexical search with cursor-based pagination
+  const endpoint = `${host}${getSearchEndpoint(currentMode)}`;
+  const mode = currentMode;
+  let allResults = [];
+
+  async function fetchPage(cursor) {
     try {
-      const resp = await fetch(`${host}/bin/caid/lexicalsearch`, {
+      const body = { query, timestamp };
+      if (cursor) body.cursor = cursor;
+
+      const resp = await fetch(endpoint, {
         ...fetchOpts,
-        body: JSON.stringify({ query, timestamp }),
+        body: JSON.stringify(body),
       });
       const data = await resp.json();
+
       if (data.error) {
         resultsEl.innerHTML = `<div class="cai-error">${data.error}</div>`;
-      } else {
-        renderSearchResults(resultsEl, data, currentMode, query);
+        return;
       }
-    } catch (e) {
-      resultsEl.innerHTML = `<div class="cai-error">Search failed: ${e.message}</div>`;
-    }
-  } else {
-    try {
-      const resp = await fetch(`${host}/bin/caid/semanticsearch`, {
-        ...fetchOpts,
-        body: JSON.stringify({ query, timestamp }),
-      });
-      const data = await resp.json();
-      if (data.error) {
-        resultsEl.innerHTML = `<div class="cai-error">${data.error}</div>`;
-      } else {
-        renderSearchResults(resultsEl, data, currentMode, query);
-      }
+
+      const filtered = filterStoryResults(data.results);
+      allResults = allResults.concat(filtered);
+      const nextCursor = data.cursor || null;
+
+      renderSearchResults(resultsEl, allResults, mode, nextCursor, fetchPage);
     } catch (e) {
       resultsEl.innerHTML = `<div class="cai-error">Search failed: ${e.message}</div>`;
     }
   }
+
+  await fetchPage(null);
 }
 
 function buildIntentChip(intent, inputEl, resultsEl, index) {
