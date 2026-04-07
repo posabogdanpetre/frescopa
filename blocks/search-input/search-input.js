@@ -26,6 +26,34 @@ const DEFAULT_INTENTS = [
   { icon: '\ud83c\udf75', text: '' },
 ];
 
+/** Per-tab only: survives refresh and in-tab navigation; cleared when the tab closes. */
+const SESSION_INTENTS_KEY = 'frescopa.search-input.example-intents';
+
+function loadIntentTextsFromSession(expectedCount) {
+  try {
+    const raw = sessionStorage.getItem(SESSION_INTENTS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+    return parsed
+      .slice(0, expectedCount)
+      .map((t) => (typeof t === 'string' ? t : ''));
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveIntentTextsToSession(intents) {
+  try {
+    sessionStorage.setItem(
+      SESSION_INTENTS_KEY,
+      JSON.stringify(intents.map((i) => (typeof i.text === 'string' ? i.text : ''))),
+    );
+  } catch (e) {
+    // Quota or storage disabled
+  }
+}
+
 function getPublishHost() {
   try {
     return getConfigValue('aem.publish') || 'https://publish-p187852-e1967098.adobeaemcloud.com';
@@ -271,7 +299,7 @@ async function performSearch(query, resultsEl) {
   await fetchPage(null);
 }
 
-function buildIntentChip(intent, inputEl, resultsEl, index) {
+function buildIntentChip(intent, inputEl, resultsEl, index, onPersist) {
   const chip = document.createElement('div');
   chip.className = 'cai-intent-chip';
 
@@ -333,6 +361,7 @@ function buildIntentChip(intent, inputEl, resultsEl, index) {
     text.classList.toggle('cai-intent-empty', !val);
     face.style.display = '';
     editInput.style.display = '';
+    if (onPersist) onPersist();
   };
 
   editInput.addEventListener('blur', saveEdit);
@@ -399,8 +428,15 @@ export default function decorate(block) {
   exRow.className = 'cai-intents-grid';
 
   const intents = DEFAULT_INTENTS.map((i) => ({ ...i }));
+  const storedTexts = loadIntentTextsFromSession(intents.length);
+  if (storedTexts) {
+    storedTexts.forEach((t, i) => {
+      if (intents[i]) intents[i].text = t;
+    });
+  }
+  const persistIntents = () => saveIntentTextsToSession(intents);
   intents.forEach((intent, idx) => {
-    exRow.append(buildIntentChip(intent, inputEl, resultsEl, idx + 1));
+    exRow.append(buildIntentChip(intent, inputEl, resultsEl, idx + 1, persistIntents));
   });
 
   exSection.append(exLabel, exRow);
