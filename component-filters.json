@@ -33,7 +33,9 @@
       "sticky-cta",
       "quiz",
       "contentai-hero",
-      "searchinput"
+      "searchinput",
+      "semantic-search",
+      "content-ai-search"
     ]
   },
   {

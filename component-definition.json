@@ -1389,6 +1389,36 @@
               }
             }
           }
+        },
+        {
+          "title": "Semantic Search",
+          "id": "semantic-search",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Semantic Search",
+                  "model": "semantic-search"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Content AI Search",
+          "id": "content-ai-search",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Content AI Search",
+                  "model": "content-ai-search"
+                }
+              }
+            }
+          }
         }
       ]
     }

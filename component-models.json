@@ -5930,5 +5930,96 @@
         "description": "Unique identifier for linking with AI Answer and Search Results components"
       }
     ]
+  },
+  {
+    "id": "semantic-search",
+    "fields": [
+      {
+        "component": "text",
+        "name": "placeholder",
+        "value": "Search stories…",
+        "label": "Placeholder",
+        "valueType": "string",
+        "description": "Placeholder text shown in the search input"
+      },
+      {
+        "component": "text",
+        "name": "resultsSize",
+        "value": "10",
+        "label": "Results Size",
+        "valueType": "string",
+        "description": "Maximum number of results to display"
+      },
+      {
+        "component": "select",
+        "name": "resultsLayout",
+        "value": "card",
+        "label": "Results Layout",
+        "valueType": "string",
+        "options": [
+          { "name": "Card", "value": "card" },
+          { "name": "List", "value": "list" }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "contentSource",
+        "value": "",
+        "label": "Content Source",
+        "valueType": "string",
+        "description": "Optional Content AI index/content source name; falls back to the servlet default when blank"
+      }
+    ]
+  },
+  {
+    "id": "content-ai-search",
+    "fields": [
+      {
+        "component": "text",
+        "name": "placeholder",
+        "value": "Ask a question…",
+        "label": "Placeholder",
+        "valueType": "string",
+        "description": "Placeholder text shown in the search input"
+      },
+      {
+        "component": "boolean",
+        "name": "genSearchToggleVisible",
+        "value": true,
+        "label": "Gen Search Toggle Visible",
+        "valueType": "boolean",
+        "description": "Show a checkbox letting visitors turn the generative summary on/off"
+      },
+      {
+        "component": "boolean",
+        "name": "genSearchEnabledByDefault",
+        "value": true,
+        "label": "Gen Search Enabled By Default",
+        "valueType": "boolean"
+      },
+      {
+        "component": "text",
+        "name": "genSearchErrorFallback",
+        "value": "Sorry, we could not generate an answer. Please try again.",
+        "label": "Gen Search Error Fallback",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "disclaimerText",
+        "value": "",
+        "label": "Disclaimer Text",
+        "valueType": "string",
+        "description": "Optional disclaimer shown below the generated answer"
+      },
+      {
+        "component": "text",
+        "name": "contentSource",
+        "value": "",
+        "label": "Content Source",
+        "valueType": "string",
+        "description": "Optional Content AI index/content source name; falls back to the servlet default when blank"
+      }
+    ]
   }
 ]
