@@ -182,14 +182,14 @@ export default function decorate(block) {
   resultsEl.setAttribute('role', 'status');
   resultsEl.setAttribute('aria-live', 'polite');
 
-  async function fetchPage(query, cursor, allItems) {
+  async function fetchPage(endpoint, query, cursor, allItems) {
     const host = getPublishHost();
     const body = { query, timestamp: Date.now() };
     if (cursor) body.cursor = cursor;
     if (contentSource) body.index = contentSource;
 
     try {
-      const resp = await fetch(`${host}/bin/caid/semanticsearch`, {
+      const resp = await fetch(`${host}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -208,7 +208,7 @@ export default function decorate(block) {
         items,
         resultsLayout,
         nextCursor,
-        (nc) => fetchPage(query, nc, items),
+        (nc) => fetchPage(endpoint, query, nc, items),
       );
     } catch (error) {
       showError(resultsEl, 'Search failed. Please try again.');
@@ -220,14 +220,14 @@ export default function decorate(block) {
     const query = input.value.trim();
     if (!query) return;
 
+    // Matches search-input.js's mode toggle: semantic on -> /bin/caid/semanticsearch,
+    // semantic off -> /bin/caid/lexicalsearch. Both share an identical request/response
+    // contract server-side (ContentAISemanticSearchServlet / ContentAILexicalSearchServlet).
     const semanticOn = toggleInput ? toggleInput.checked : enabledByDefault;
-    if (!semanticOn) {
-      resultsEl.innerHTML = '';
-      return;
-    }
+    const endpoint = semanticOn ? '/bin/caid/semanticsearch' : '/bin/caid/lexicalsearch';
 
     showLoading(resultsEl);
-    await fetchPage(query, null, []);
+    await fetchPage(endpoint, query, null, []);
   });
 
   block.append(form);
