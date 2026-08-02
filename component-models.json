@@ -5968,6 +5968,21 @@
         "label": "Content Source",
         "valueType": "string",
         "description": "Optional Content AI index/content source name; falls back to the servlet default when blank"
+      },
+      {
+        "component": "boolean",
+        "name": "semanticSearchToggleVisible",
+        "value": true,
+        "label": "Semantic Search Toggle Visible",
+        "valueType": "boolean",
+        "description": "Show a checkbox letting visitors turn semantic search on/off"
+      },
+      {
+        "component": "boolean",
+        "name": "semanticSearchEnabledByDefault",
+        "value": true,
+        "label": "Semantic Search Enabled By Default",
+        "valueType": "boolean"
       }
     ]
   },

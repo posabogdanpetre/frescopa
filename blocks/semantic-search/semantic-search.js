@@ -137,6 +137,8 @@ export default function decorate(block) {
   const resultsLayout = config['results-layout'] === 'list' ? 'list' : 'card';
   const contentSource = config['content-source'] || '';
   const { id } = config;
+  const toggleVisible = config['semantic-search-toggle-visible'] !== 'false';
+  const enabledByDefault = config['semantic-search-enabled-by-default'] !== 'false';
 
   block.innerHTML = '';
   block.classList.add('cmp-semantic-search');
@@ -158,6 +160,22 @@ export default function decorate(block) {
   submit.textContent = 'Search';
 
   form.append(input, submit);
+
+  let toggleInput;
+  let toggleWrap;
+  if (toggleVisible) {
+    toggleWrap = document.createElement('label');
+    toggleWrap.className = 'cmp-semantic-search__toggle';
+
+    toggleInput = document.createElement('input');
+    toggleInput.type = 'checkbox';
+    toggleInput.checked = enabledByDefault;
+
+    const toggleLabel = document.createElement('span');
+    toggleLabel.textContent = 'Enable semantic search';
+
+    toggleWrap.append(toggleInput, toggleLabel);
+  }
 
   const resultsEl = document.createElement('div');
   resultsEl.className = 'cmp-semantic-search__results';
@@ -202,9 +220,17 @@ export default function decorate(block) {
     const query = input.value.trim();
     if (!query) return;
 
+    const semanticOn = toggleInput ? toggleInput.checked : enabledByDefault;
+    if (!semanticOn) {
+      resultsEl.innerHTML = '';
+      return;
+    }
+
     showLoading(resultsEl);
     await fetchPage(query, null, []);
   });
 
-  block.append(form, resultsEl);
+  block.append(form);
+  if (toggleWrap) block.append(toggleWrap);
+  block.append(resultsEl);
 }
