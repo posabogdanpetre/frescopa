@@ -1,6 +1,6 @@
 mountpoints:
   /:
-    url: "https://author-p187852-e1967098.adobeaemcloud.com/bin/franklin.delivery/posabogdanpetre/frescopa/GRANITE-71249-eds-content-ai-blocks"
+    url: "https://author-p187852-e1967098.adobeaemcloud.com/bin/franklin.delivery/posabogdanpetre/frescopa/main"
     type: "markup"
     suffix: ".html"
 folders:
