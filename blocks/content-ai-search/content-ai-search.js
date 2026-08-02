@@ -110,7 +110,49 @@ function renderResultCard(result) {
   return card;
 }
 
-function renderAnswer(container, genData, searchData, resultsSize, resultsLayout, disclaimerText) {
+function renderResults(resultsEl, items, layout, cursor, onLoadMore) {
+  resultsEl.innerHTML = '';
+
+  if (!items.length) {
+    toggleHidden(resultsEl, true);
+    return;
+  }
+  toggleHidden(resultsEl, false);
+
+  const header = document.createElement('div');
+  header.className = 'cmp-content-ai-search__results-header';
+  header.textContent = 'Related Results';
+  resultsEl.append(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'cmp-content-ai-search__results-grid';
+  grid.classList.toggle('cmp-content-ai-search__results-grid--list', layout === 'list');
+  grid.classList.toggle('cmp-content-ai-search__results-grid--card', layout !== 'list');
+  items.forEach((item) => grid.append(renderResultCard(item)));
+  resultsEl.append(grid);
+
+  if (cursor) {
+    const pagination = document.createElement('div');
+    pagination.className = 'cmp-content-ai-search__pagination';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'cmp-content-ai-search__load-more';
+    button.textContent = 'Load more results';
+    button.addEventListener('click', () => {
+      button.disabled = true;
+      button.textContent = 'Loading…';
+      onLoadMore(cursor);
+    });
+    pagination.append(button);
+    resultsEl.append(pagination);
+  }
+}
+
+function toggleHidden(element, hidden) {
+  element.classList.toggle('cmp-content-ai-search__results--hidden', hidden);
+}
+
+function renderAnswer(container, genData, disclaimerText) {
   container.innerHTML = '';
 
   const panel = document.createElement('div');
@@ -156,21 +198,6 @@ function renderAnswer(container, genData, searchData, resultsSize, resultsLayout
     disclaimer.className = 'cmp-content-ai-search__disclaimer';
     disclaimer.textContent = disclaimerText;
     container.append(disclaimer);
-  }
-
-  const results = (searchData && searchData.results) || [];
-  if (results.length) {
-    const resultsHeader = document.createElement('div');
-    resultsHeader.className = 'cmp-content-ai-search__results-header';
-    resultsHeader.textContent = 'Related Results';
-    container.append(resultsHeader);
-
-    const grid = document.createElement('div');
-    grid.className = 'cmp-content-ai-search__results-grid';
-    grid.classList.toggle('cmp-content-ai-search__results-grid--list', resultsLayout === 'list');
-    grid.classList.toggle('cmp-content-ai-search__results-grid--card', resultsLayout !== 'list');
-    results.slice(0, resultsSize).forEach((result) => grid.append(renderResultCard(result)));
-    container.append(grid);
   }
 }
 
@@ -229,6 +256,9 @@ export default function decorate(block) {
   summaryEl.setAttribute('role', 'status');
   summaryEl.setAttribute('aria-live', 'polite');
 
+  const resultsEl = document.createElement('div');
+  resultsEl.className = 'cmp-content-ai-search__results cmp-content-ai-search__results--hidden';
+
   let toggleInput;
   let toggleWrap;
   if (toggleVisible) {
@@ -245,10 +275,42 @@ export default function decorate(block) {
     toggleWrap.append(toggleInput, toggleLabel);
   }
 
+  async function fetchResultsPage(query, cursor, allItems) {
+    const host = getPublishHost();
+    const body = { query, timestamp: Date.now() };
+    if (cursor) body.cursor = cursor;
+    if (contentSource) body.index = contentSource;
+
+    try {
+      const resp = await fetch(`${host}/bin/caid/semanticsearch`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await resp.json();
+      if (data.error) return;
+
+      const items = allItems.concat(data.results || []).slice(0, resultsSize);
+      const nextCursor = items.length < resultsSize ? (data.cursor || null) : null;
+      renderResults(
+        resultsEl,
+        items,
+        resultsLayout,
+        nextCursor,
+        (nc) => fetchResultsPage(query, nc, items),
+      );
+    } catch (error) {
+      // Keep whatever results are already shown; the generative answer's own
+      // error handling covers the primary failure-reporting path.
+    }
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const query = input.value.trim();
     if (!query) return;
+
+    fetchResultsPage(query, null, []);
 
     const summaryOn = toggleInput ? toggleInput.checked : enabledByDefault;
     if (!summaryOn) {
@@ -260,36 +322,18 @@ export default function decorate(block) {
     const host = getPublishHost();
     const genBody = { query, timestamp: Date.now() };
     if (contentSource) genBody.clientId = contentSource;
-    const searchBody = { query, timestamp: Date.now() };
-    if (contentSource) searchBody.index = contentSource;
 
     try {
-      const [genResp, searchResp] = await Promise.all([
-        fetch(`${host}/bin/caid/gensearch`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(genBody),
-        }),
-        fetch(`${host}/bin/caid/semanticsearch`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(searchBody),
-        }),
-      ]);
-      const genData = await genResp.json();
-      const searchData = await searchResp.json();
-
-      if (genData.error) {
-        showError(summaryEl, genData.error);
+      const resp = await fetch(`${host}/bin/caid/gensearch`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(genBody),
+      });
+      const data = await resp.json();
+      if (data.error) {
+        showError(summaryEl, data.error);
       } else {
-        renderAnswer(
-          summaryEl,
-          genData,
-          searchData.error ? null : searchData,
-          resultsSize,
-          resultsLayout,
-          disclaimerText,
-        );
+        renderAnswer(summaryEl, data, disclaimerText);
       }
     } catch (error) {
       showError(summaryEl, errorFallback);
@@ -299,4 +343,5 @@ export default function decorate(block) {
   block.append(form);
   if (toggleWrap) block.append(toggleWrap);
   block.append(summaryEl);
+  block.append(resultsEl);
 }
