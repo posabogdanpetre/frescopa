@@ -6034,6 +6034,25 @@
         "label": "Content Source",
         "valueType": "string",
         "description": "Optional Content AI index/content source name; falls back to the servlet default when blank"
+      },
+      {
+        "component": "text",
+        "name": "resultsSize",
+        "value": "10",
+        "label": "Results Size",
+        "valueType": "string",
+        "description": "Maximum number of related search results to display alongside the generative answer"
+      },
+      {
+        "component": "select",
+        "name": "resultsLayout",
+        "value": "card",
+        "label": "Results Layout",
+        "valueType": "string",
+        "options": [
+          { "name": "Card", "value": "card" },
+          { "name": "List", "value": "list" }
+        ]
       }
     ]
   }

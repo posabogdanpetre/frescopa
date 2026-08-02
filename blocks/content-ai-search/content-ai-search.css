@@ -97,6 +97,104 @@
   color: #666;
 }
 
+.content-ai-search .cmp-content-ai-search__results {
+  margin-top: 1.5em;
+}
+
+.content-ai-search .cmp-content-ai-search__results--hidden {
+  display: none;
+}
+
+.content-ai-search .cmp-content-ai-search__results-header {
+  font-weight: 600;
+  margin-bottom: 0.8em;
+}
+
+.content-ai-search .cmp-content-ai-search__pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5em;
+}
+
+.content-ai-search .cmp-content-ai-search__load-more {
+  padding: 0.6em 1.4em;
+  border: 1px solid var(--link-color, #05a);
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--link-color, #05a);
+  cursor: pointer;
+}
+
+.content-ai-search .cmp-content-ai-search__load-more:hover {
+  background-color: var(--link-color, #05a);
+  color: #fff;
+}
+
+.content-ai-search .cmp-content-ai-search__load-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.content-ai-search .cmp-content-ai-search__results-grid--card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1em;
+}
+
+@media (width >= 600px) {
+  .content-ai-search .cmp-content-ai-search__results-grid--card {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .content-ai-search .cmp-content-ai-search__results-grid--card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.content-ai-search .cmp-content-ai-search__results-grid--list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.content-ai-search .cmp-content-ai-search__result-card {
+  display: block;
+  border: 1px solid #dadada;
+  border-radius: 8px;
+  overflow: hidden;
+  color: currentcolor;
+  text-decoration: none;
+}
+
+.content-ai-search .cmp-content-ai-search__result-card:hover,
+.content-ai-search .cmp-content-ai-search__result-card:focus {
+  text-decoration: none;
+  border-color: var(--link-color, #05a);
+}
+
+.content-ai-search .cmp-content-ai-search__result-card-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.content-ai-search .cmp-content-ai-search__result-card-body {
+  padding: 0.8em 1em;
+}
+
+.content-ai-search .cmp-content-ai-search__result-card-title {
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+
+.content-ai-search .cmp-content-ai-search__result-card-description {
+  font-size: var(--body-font-size-s, 0.9rem);
+  margin: 0;
+}
+
 .content-ai-search .cmp-content-ai-search__loading,
 .content-ai-search .cmp-content-ai-search__error {
   text-align: center;
