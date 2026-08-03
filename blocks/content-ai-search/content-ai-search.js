@@ -152,7 +152,23 @@ function toggleHidden(element, hidden) {
   element.classList.toggle('cmp-content-ai-search__results--hidden', hidden);
 }
 
-function renderAnswer(container, genData, disclaimerText) {
+function wait(ms) {
+  return new Promise((resolve) => { setTimeout(resolve, ms); });
+}
+
+async function typeWords(el, text, delay = 25) {
+  const words = text.split(/\s+/).filter(Boolean);
+  el.textContent = '';
+  el.classList.add('cmp-content-ai-search__summary-text--typing');
+  for (let i = 0; i < words.length; i += 1) {
+    el.textContent += (i === 0 ? '' : ' ') + words[i];
+    // eslint-disable-next-line no-await-in-loop
+    await wait(delay);
+  }
+  el.classList.remove('cmp-content-ai-search__summary-text--typing');
+}
+
+async function renderAnswer(container, genData, disclaimerText) {
   container.innerHTML = '';
 
   const panel = document.createElement('div');
@@ -165,7 +181,6 @@ function renderAnswer(container, genData, disclaimerText) {
 
   const text = document.createElement('div');
   text.className = 'cmp-content-ai-search__summary-text';
-  text.innerHTML = formatMarkdown(genData.result || '');
   panel.append(text);
 
   const links = (genData.retrievedLinks || []).filter((l) => l.url && !l.url.endsWith('/robots.txt'));
@@ -199,6 +214,9 @@ function renderAnswer(container, genData, disclaimerText) {
     disclaimer.textContent = disclaimerText;
     container.append(disclaimer);
   }
+
+  await typeWords(text, genData.result || '');
+  text.innerHTML = formatMarkdown(genData.result || '');
 }
 
 function showLoading(container) {
@@ -333,7 +351,7 @@ export default function decorate(block) {
       if (data.error) {
         showError(summaryEl, data.error);
       } else {
-        renderAnswer(summaryEl, data, disclaimerText);
+        await renderAnswer(summaryEl, data, disclaimerText);
       }
     } catch (error) {
       showError(summaryEl, errorFallback);
